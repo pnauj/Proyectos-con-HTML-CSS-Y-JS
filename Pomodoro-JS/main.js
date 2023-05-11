@@ -1,4 +1,4 @@
-const task = [];
+const tasks = [];
 let time = 0;
 let timer = null;
 let timerbreak = null;
@@ -24,16 +24,52 @@ function createTask(value) {
     completed: false,
   };
 
-  task.unshift(newTask);
+  tasks.unshift(newTask);
 }
 
-function renderTasks(){
-    const html = task.map(task => {
-        return `
+function renderTasks() {
+  const html = tasks.map((task) => {
+    return `
             <div class="task">
-                <div class='completed'></div>
-                <div class='title'></div>
+                <div class='completed'>${
+                  task.completed
+                    ? `<span class="done">Done</span>`
+                    : `<button class="start-button" data-id="${task.id}">Start</button>`
+                }</div>
+                <div class='title'>${task.title}</div>
             </div>
         `;
-    })
+  });
+
+  const tasksContainer = document.querySelector("#task");
+  tasksContainer.innerHTML = html.join("");
+
+  const startButtons = document.querySelectorAll(".task .start-button");
+  startButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      if (!timer) {
+        const id = button.getAttribute("data-id");
+        startButtonHandler(id);
+        button.textContent = "In progress...";
+      }
+    });
+  });
+}
+
+function startButtonHandler(id) {
+  time = 25 * 60;
+  current = id;
+  const taskIndex = tasks.findIndex((task) => task.id === id);
+  const taskName = documente.querySelector("#time #taskName");
+  taskName.textContent = tasks[taskIndex].title;
+
+
+  timer = setInterval(() => {
+    timeHandler(id);
+  }, 1000)
+}
+
+
+function timeHandler(id) {
+  
 }
