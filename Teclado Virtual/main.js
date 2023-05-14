@@ -60,25 +60,26 @@ const keys = [
 
 let mayus = false;
 let shift = false;
+let current = null;
+
+renderKeyboard();
 
 function renderKeyboard() {
   const keyboardContainer = document.querySelector("#keyboardContainer");
-  let empty = `
-        <div class="keyEmpty"></div>
-    `;
+  let empty = `<div class="keyEmpty"></div>`;
 
-  const layers = keys.map((layers) => {
-    return layers.map((key) => {
+  const layers = keys.map((layer) => {
+    return layer.map((key) => {
       if (key[0] === "SHIFT") {
         return `
-          <button class='key keyShift'>${key[0]}</button>
+          <button class='key keyShift ${shift ? 'activated' : ''}'>${key[0]}</button>
         `;
       }
       if (key[0] == "MAYUS") {
-        return `<button class=' key keyMayus'>${key[0]}</button>`;
+        return `<button class='key keyMayus ${mayus ? 'activated' : ''}'>${key[0]}</button>`;
       }
       if (key[0] == "SPACE") {
-        return `<button class=' key keySpace'></button>`;
+        return `<button class='key keySpace'></button>`;
       }
 
       return `
@@ -87,8 +88,8 @@ function renderKeyboard() {
             shift
               ? key[1]
               : mayus &&
-                key[0].toLowerCase.charCodeAt() >= 97 &&
-                key[0].toLowerCase.charCodeAt() <= 122
+                key[0].toLowerCase().charCodeAt(0) >= 97 &&
+                key[0].toLowerCase().charCodeAt(0) <= 122
               ? key[1]
               : key[0]
           }
@@ -99,13 +100,42 @@ function renderKeyboard() {
   layers[0].push(empty);
   layers[1].unshift(empty);
 
-  const htmlLayers = layers.map((layers) => {
-    return layers.join("");
+  const htmlLayers = layers.map((layer) => {
+    return layer.join("");
   });
 
-  keyboardContainer.innerHTML = '';
+  keyboardContainer.innerHTML = "";
 
   htmlLayers.forEach((layer) => {
-    keyboardContainer.innerHTML += `<div class='layer'>${layer}</div>`
-  })
+    keyboardContainer.innerHTML += `<div class='layer'>${layer}</div>`;
+  });
+
+  document.querySelectorAll(".key").forEach((key) => {
+    key.addEventListener("click", (e) => {
+      if (current) {
+        if (key.textContent === "SHIFT") {
+          shift = !shift;
+          renderKeyboard();
+        } else if (key.textContent === "MAYUS") {
+          mayus = !mayus;
+          renderKeyboard();
+        } else if (key.textContent === "") {
+          current.value += " ";
+        } else {
+          current.value += key.textContent.trim();
+          if (shift) {
+            shift = false;
+          }
+        }
+        renderKeyboard();
+        current.focus();
+      }
+    });
+  });
 }
+
+document.querySelectorAll("input").forEach((input) => {
+  input.addEventListener("focusin", (e) => {
+    current = e.target;
+  });
+});

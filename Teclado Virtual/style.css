@@ -1,0 +1,69 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+#keyboardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 684px;
+  gap: 5px;
+  margin: 100px auto;
+}
+
+.layer {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  width: 100%;
+}
+
+.key {
+  background-color: #222;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.keyNormal {
+  width: 50px;
+  height: 70px;
+}
+
+.keyMayus {
+  width: 120px;
+  height: 70px;
+}
+
+.keyShift {
+  width: 80px;
+  height: 70px;
+}
+
+.keySpace {
+  width: 400px;
+  height: 70px;
+}
+
+.key:hover {
+  background-color: #555;
+}
+
+.keyEmpty{
+   width: 25px;
+   height: 70px;
+   background-color: transparent;
+   color: white;
+   border-radius: 3px;
+   display: flex;
+   align-items: center;
+   justify-content: center; 
+}
+
+.activated{
+    outline: greenyellow solid 2px;
+}
