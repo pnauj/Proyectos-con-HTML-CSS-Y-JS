@@ -101,9 +101,7 @@ function renderStore() {
                 <div class="qty">${item.qty}Units</div>
 
                 <div class="actions">
-                    <button class="add" data-id="${
-                      item.id
-                    }">Add to Shopping Cart</button>
+                    <button class="add" data-id="${item.id}">Add to Shopping Cart</button>
                 </div>
             </div>
         `;
@@ -129,7 +127,7 @@ function renderShoppingCart() {
     const dbItem = db.methods.find(item.id);
     return `
       <div class="item">
-            <div class="title">${dbItem.title}</div>
+           <div class="title">${dbItem.title}</div>
            <div class="price">${numberToCurrency(dbItem.price)}</div>
            <div class="qty">${item.qty}Units</div>
            <div class="subtotal">SubTotal: ${numberToCurrency(
@@ -145,14 +143,14 @@ function renderShoppingCart() {
 
   const closeButton = `
       <div class='cart-header'>
-          <button class='Bclose'>Close</button>
+          <button class='bClose'>Close</button>
        </div>
   `;
   const purchaseButton =
     shoppingCart.items.length > 0
       ? `
     <div class='cart-actions'>
-    <button id='Bpurchase'>purchase</button>
+    <button id='bPurchase'>purchase</button>
     </div>
   `
       : "";
@@ -162,8 +160,45 @@ function renderShoppingCart() {
   <div class='total'>Total : ${numberToCurrency(total)}</div>
  `;
 
- const shoppingCartContainer = document.querySelector('#shopping-cart-container');
- shoppingCartContainer.innerHTML = closeButton + html.join("") +  totalContainer + purchaseButton; 
+  const shoppingCartContainer = document.querySelector(
+    "#shopping-cart-container"
+  );
+
+  shoppingCartContainer.classList.remove("hide");
+  shoppingCartContainer.classList.add("show");
+
+  shoppingCartContainer.innerHTML =
+    closeButton + html.join("") + totalContainer + purchaseButton;
+
+  document.querySelectorAll(".addOne").forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const id = parseInt(button.getAttribute("data-id"));
+      shoppingCart.methods.add(id, 1);
+      renderShoppingCart();
+    });
+  });
+
+  document.querySelectorAll(".removeOne").forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const id = parseInt(button.getAttribute("data-id"));
+      shoppingCart.methods.remove(id, 1);
+      renderShoppingCart();
+    });
+  });
+
+  document.querySelector(".bClose").addEventListener("click", (e) => {
+    shoppingCartContainer.classList.remove("show");
+    shoppingCartContainer.classList.add("hide");
+  });
+
+  const bPurchase = document.querySelector("#bPurchase");
+  if (bPurchase) {
+    bPurchase.addEventListener("click", (e) => {
+      shoppingCart.methods.purchase();
+      renderStore();
+      renderShoppingCart();
+    });
+  }
 }
 
 function numberToCurrency(n) {
