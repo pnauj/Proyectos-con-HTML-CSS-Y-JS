@@ -17,7 +17,7 @@ const db = {
       id: 0,
       title: "Funko Pop",
       price: 250,
-      qty: 5,
+      qty: 16,
     },
     {
       id: 1,
@@ -29,7 +29,13 @@ const db = {
       id: 2,
       title: "Harry Potter",
       price: 150,
-      qty: 5,
+      qty: 4,
+    },
+    {
+      id: 3,
+      title: "GOT",
+      price: 300,
+      qty: 10,
     },
   ],
 };
@@ -102,30 +108,28 @@ function renderStore() {
             </div>
         `;
   });
-  
+
   document.querySelector("#store-container").innerHTML = html.join("");
+  document.querySelectorAll('.item .actions .add').forEach(button => {
+    button.addEventListener('click' , e => {
+      const id = button.getAttribute('data-id')
+      const item = db.methods.find(id)
 
-  document.querySelectorAll("item .actions .add").forEach((button) => {
-    button.addEventListener("click", (e) => {
-      const id = button.getAttribute("data-id");
-      const item = db.methods.find(id);
-
-      if (item && item.qty - 1 > 0) {
-        shoppingCart.methods.add(id, 1);
+      if(item && item.qty -1 > 0){
+        shoppingCart.methods.add(id, 1)
         console.log(shoppingCart);
-        renderShoppingCart();
+        renderShoppingCart()
       } else {
-        console.log("ya no hay mas inventario");
+        console.log('ya no hay inventario');
       }
-    });
-  });
+    })
+  })
 }
-
 function renderShoppingCart() {}
 
 function numberToCurrency(n) {
   return new Intl.NumberFormat("en-US", {
-    maximumFractionDigits: 2,
+    maximumSignificantDigits: 2,
     style: "currency",
     currency: "USD",
   }).format(n);
