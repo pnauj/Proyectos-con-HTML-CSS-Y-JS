@@ -178,7 +178,7 @@ function renderShoppingCart() {
     });
   });
 
-  document.querySelectorAll(".removeOne").forEach((button) => {
+  document.querySelectorAll(".removeONe").forEach((button) => {
     button.addEventListener("click", (e) => {
       const id = parseInt(button.getAttribute("data-id"));
       shoppingCart.methods.remove(id, 1);
